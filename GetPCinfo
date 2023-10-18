@@ -1,0 +1,8 @@
+RUN THE FOLLOWING COMMAND IN EITHER CMD OR POWERSHELL TO GET PC NAME, MAKE, MODEL, AND SERIAL NUMBER.
+USEFUL WHEN CREATING INVENTORY SHEET OF COMPUTERS THAT YOU HAVE ACCESS TO.
+
+CMD
+wmic computersystem get name, manufacturer, model && wmic bios get serialnumber
+
+POWESHELL
+Get-WmiObject Win32_ComputerSystem | Select-Object Name, Manufacturer, Model | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Name "Serial Number" -Value (Get-WmiObject Win32_BIOS).SerialNumber -PassThru }
