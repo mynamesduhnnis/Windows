@@ -1,0 +1,14 @@
+Run the below script via PowerShell to rename computer. Replace [computername] with the name desired. After running this script the computer will be renamed on the next startup.
+You can also run the following command in PowerShell to get the current computer name.
+$env:COMPUTERNAME
+---------------------------------------------------------------------------------------
+
+$computerName = "[computername]"
+
+# Create a registry key to store the new computer name
+$regPath = "HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName"
+Set-ItemProperty -Path $regPath -Name "ComputerName" -Value $computerName
+
+# Create a registry key to indicate that the computer name needs to be changed on next startup
+$regPath = "HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName"
+Set-ItemProperty -Path $regPath -Name "ComputerName" -Value $computerName
