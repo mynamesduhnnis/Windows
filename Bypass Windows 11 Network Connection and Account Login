@@ -1,0 +1,25 @@
+If you've got a Windows 11 PC and cannot get past the Connect to Network screenbecause it wants you to sign into a Micrososft account and have never connected the PC to a network do the following
+
+Open CMD 
+Shift and F10 (Shift+Fn+F10)
+at any point in the Windows 11 Initial Setup
+
+Run the following
+OOBE\BYPASSNRO
+
+After running the PC may restart. Continue setup as normal and when you reach the Connect to Network screen you should now have the option to continue without connecting to ao network.
+====================================================================================================
+If you've got a Windows 11 PC and have connected it to a network do the following.
+
+Open CMD 
+Shift and F10 (Shift+Fn+F10)
+at any point in the Windows 11 Initial Setup
+
+To list Wifi connection on Windows Initial Setup run the following command
+netsh wlan show profiles
+
+identify the network the PC has been connected to and run the following
+netsh wlan delete profile [wireless network name]
+
+Then restart the Setup process by running the following command
+OOBE\BYPASSNRO
