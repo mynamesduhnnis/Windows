@@ -1,0 +1,12 @@
+Convert FAT32 to NTFS – CMD
+Run CMD as Administrator
+Enter: help convert 
+To list help instructions. 
+To convert media/flash drive insert media/flash drive into pc 
+Check drive letter of media/flash drive 
+In CMD type: convert [DRIVELETTER]: /FS:NTFS
+Example:
+	convert D: /FS:NTFS
+If asked to force a dismount type Y
+Let command finish.
+If successful “Conversion complete” message will display.
