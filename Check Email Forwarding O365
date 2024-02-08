@@ -1,0 +1,42 @@
+Must have exchange online managment installed.
+Install using the following command.
+
+Install-Module -Name ExchangeOnlineManagement -Force
+
+--------------------------------------------------------------------------------------------------------
+
+1. Connect to exchange online with admin account via PowerShell, run command
+	Connect-ExchangeOnline -UserPrincipalName youradminemailaddress@domain.com
+
+2. Run the following script after connecting to exchange online, insert email address to check
+$emailAddress = "handle@domain.com"
+
+#Script Start
+==================================================================
+# Define the email address to check
+$emailAddress = "handle@domain.com"
+
+# Check if the email is being forwarded
+$forwardingInfo = Get-Mailbox -Identity $emailAddress | Select-Object ForwardingAddress, ForwardingSmtpAddress, DeliverToMailboxAndForward
+
+If ($forwardingInfo.ForwardingAddress -ne $null -or $forwardingInfo.ForwardingSmtpAddress -ne $null) {
+    Write-Host "Email forwarding is set for $emailAddress"
+    If ($forwardingInfo.ForwardingAddress -ne $null) {
+        Write-Host "Forwarding Address: $($forwardingInfo.ForwardingAddress)"
+    }
+    If ($forwardingInfo.ForwardingSmtpAddress -ne $null) {
+        Write-Host "Forwarding SMTP Address: $($forwardingInfo.ForwardingSmtpAddress)"
+    }
+    If ($forwardingInfo.DeliverToMailboxAndForward) {
+        Write-Host "Emails are being delivered to both the mailbox and forwarding address."
+    } else {
+        Write-Host "Emails are only being forwarded and not delivered to the mailbox."
+    }
+} else {
+    Write-Host "No email forwarding is set for $emailAddress"
+}
+==================================================================
+#Script End
+
+3. Disconnect from exchange online, run the following command
+	Disconnect-ExchangeOnline -Confirm:$false
