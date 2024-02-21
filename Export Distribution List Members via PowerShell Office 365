@@ -1,0 +1,36 @@
+Export Distribution List Members via PowerShell Office 365
+
+===================================================================================================================
+
+# Requires the installation of the Exchange Online Management Module or AzureAD module.
+# Connect to Office 365
+# Exchange Online PowerShell Module version 2 (ExchangeOnlineManagement)
+Connect-ExchangeOnline -UserPrincipalName <YourAdminAccount@YourDomain.com>
+
+# AzureAD PowerShell Module
+# Connect-AzureAD
+
+# Group ID to export members from
+$groupId = "[groupId]"
+
+# Get the distribution group members
+$groupMembers = Get-DistributionGroupMember -Identity $groupId | Select DisplayName,PrimarySmtpAddress
+
+# Export to CSV file which can be opened in Excel
+$groupMembers | Export-Csv -Path "[path]\[filename].csv" -NoTypeInformation
+
+# Disconnect the session
+Disconnect-ExchangeOnline -Confirm:$false
+
+# Alternative using AzureAD
+# Disconnect-AzureAD
+
+===================================================================================================================
+
+1. Replace <YourAdminAccount@YourDomain.com> with your actual Office 365 admin account email address.
+2. Replace [groupId] with distribution list ID
+You can get your groupId by logging into Micrososft 365 Admin center and navigating to the root of your 
+distribution groups, click export, select export groups in list. A csv will be doanloaded and in that CSV you will find your 
+groupId number for the desired distribution list.
+
+3. Replace "[path]\[filename].csv" with the actual path where you want to save the Excel file.
