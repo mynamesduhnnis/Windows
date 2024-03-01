@@ -1,0 +1,33 @@
+I ran into an issue where I was needing to add an email to another mailbox as a "Send as" permissioned member. When in exchange admin trying to add the member, the email wouldn't appear.
+Keep in minf that both mailboxes are licensed E1 and are shared mailboxes.
+With that being said I ran some PowerShell commands to get the email address that was not appearing when searching for members to be added
+
+1. Connect to Exchange Online via PowerShell (elivated prompt)
+	Execute the following:
+		Connect-ExchangeOnline
+
+2. Once connected and authenticated run the following (be sure to replace addme@domain.com and addingto@domain.com but keep the quotes)
+
+# Define the user and mailbox
+$userToAdd = "addme@domain.com"
+$targetMailbox = "addingto@domain.com"
+
+# Grant 'Send As' permission using Add-RecipientPermission
+Add-RecipientPermission -Identity $targetMailbox -Trustee $userToAdd -AccessRights SendAs
+
+# Note: No confirmation prompt will be shown. If you wish to include confirmation, remove -Confirm:$false
+
+3. Confirm permissions; Run the following command (be sure to replace addme@domain.com and addingto@domain.com but keep the quotes)
+
+# Define the user and mailbox
+$userToCheck = "addme@domain.com"
+$mailboxToCheck = "addingto@domain.com"
+
+# Get and confirm 'Send As' permission
+$permissions = Get-RecipientPermission -Identity $mailboxToCheck | Where-Object {$_.Trustee -eq $userToCheck -and $_.AccessRights -contains "SendAs"}
+
+if ($permissions) {
+    Write-Host "The user $userToCheck has 'Send As' permission on the mailbox $mailboxToCheck."
+} else {
+    Write-Host "The user $userToCheck does NOT have 'Send As' permission on the mailbox $mailboxToCheck."
+}
