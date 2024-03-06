@@ -1,0 +1,18 @@
+# Check if connected to Wi-Fi
+$wifiProfile = (netsh wlan show interfaces) -Match '^    SSID\s+:\s+(.+)$' | Out-String
+$wifiName = if ($wifiProfile) { $wifiProfile.Trim().Split(":")[1].Trim() } else { $null }
+
+if ($wifiName) {
+    Write-Output "You are currently connected to Wi-Fi network: $wifiName"
+} else {
+    # Check for LAN connection
+    $networkConnection = Get-CimInstance -ClassName Win32_NetworkAdapterConfiguration | Where-Object { $_.IPAddress -ne $null }
+    $lanConnected = $networkConnection | Where-Object { $_.Description -notmatch 'wireless' -and $_.IPEnabled -eq $true }
+
+    if ($lanConnected) {
+        $lanName = $lanConnected.Description
+        Write-Output "You are currently connected to a LAN network: $lanName"
+    } else {
+        Write-Output "You are not currently connected to any Wi-Fi or LAN network."
+    }
+}
