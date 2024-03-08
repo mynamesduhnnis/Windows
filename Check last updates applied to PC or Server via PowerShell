@@ -1,0 +1,2 @@
+$lastUpdate = Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 1
+$lastUpdate.InstalledOn
