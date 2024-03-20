@@ -1,0 +1,26 @@
+Run PowerShell as admin
+
+# Script to remove Windows Spotlight icon from the Desktop in Windows 11
+
+# Open Registry Editor
+Start-Process regedit
+
+# Wait for Registry Editor to open
+Start-Sleep -s 5
+
+# Set Registry value to hide Windows Spotlight icon
+Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel' -Name '{2cc5ca98-6485-489a-920e-b3e88a6ccce3}' -Value 1
+
+# Refresh Desktop
+$signature = @"
+[DllImport("user32.dll", SetLastError = true)]
+public static extern bool PostMessage(int hWnd, uint Msg, int wParam, int lParam);
+"@
+
+Add-Type -MemberDefinition $signature -Name User32 -Namespace Win32Functions
+$hWnd = (Get-Process -Name explorer).MainWindowHandle.ToInt32()
+[Win32Functions.User32]::PostMessage($hWnd, 0x0112, 0xF060, 0)
+
+# Done
+
+#You may need to manually refresh your desktop.
